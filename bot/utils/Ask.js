@@ -35,7 +35,7 @@ module.exports = cancel => ({
             text: 'Hãy chọn môn mà bạn cần gia sư nhé!', 
             quickReplies: ['Huỷ', 'Bỏ qua mục này']
         }, (payload, convo) => {
-            this.checkCancel(payload, convo)
+            if (this.checkCancel(payload, convo)) return false
             // Skip check
             if (payload.message)
                 if (payload.message.text)
@@ -58,7 +58,7 @@ module.exports = cancel => ({
             text: 'Bạn muốn trở thành gia sư dạy ở môn nào?', 
             quickReplies: ['Huỷ', 'Bỏ qua mục này'] 
         }, (payload, convo) => {
-            this.checkCancel(payload, convo)
+            if (this.checkCancel(payload, convo)) return false
             // Skip check
             if (payload.message)
                 if (payload.message.text) 
