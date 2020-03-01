@@ -20,6 +20,9 @@ const UserSchema = mongoose.Schema(
         },
         needSub: {
             type: String
+        },
+        personaId: {
+            type: String
         }
     },
     { timestamps: true }

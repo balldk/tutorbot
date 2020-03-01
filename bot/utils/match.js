@@ -1,25 +1,33 @@
 const subjects = require('../templates/subjects')
-const updateUser = require('../../db/updateUser')
+const updateUser = require('../../db/methods/updateUser')
 const state = global.state
 
-module.exports = async (convo, bot, isChange=true) => {
+module.exports = async (convo, bot, oldData) => {
     // Get user info
     let userId = convo.get('userId')
     let userType = convo.get('userType')
-    user = {
+    let user = {
         needSub: convo.get('needSub'),
         goodSub: convo.get('goodSub'),
-        grade: convo.get('grade')
+        grade: convo.get('grade'),
+        personaId: convo.get('personaId')
     }
 
     // Check if info has been changed -> save info
+    let isChange = Object.entries(user).some(each => oldData[each[0]] !== each[1])
+
     if (isChange) {
         updateUser(userId, user, data => {
             console.log(data.userId, 'updated profile')
         })
-        await convo.say('Thông tin của bạn đã được lưu cho những lần sau, nếu bạn muốn thay đổi hãy vào phần "Menu -> Chỉnh sửa thông tin" nhé!')
+        await convo.say('Thông tin của bạn đã được lưu cho những lần sau, nếu bạn muốn thay đổi hãy vào phần "Menu -> Tính năng khác -> Cài đặt tài khoản" nhé!')
     }
-    await convo.say('Hệ thống đang tìm kiếm người phù hợp...')
+    await convo.say({
+        text: 'Hệ thống đang tìm kiếm người phù hợp...',
+        quickReplies: [ { content_type: 'text', title: 'Dừng tìm kiếm', payload: 'OUT_ROOM'} ]
+    })
+
+    user.nickname = convo.get('nickname')
 
     // Categorize userType
     let otherListType
@@ -68,23 +76,35 @@ module.exports = async (convo, bot, isChange=true) => {
     if (bestOther) {
         let student = userType === 'student' ? { id: userId, info: user} : bestOther
         let tutor = userType === 'tutor' ? { id: userId, info: user} : bestOther
+        
         // Put to room
-        state.room[student.id] = tutor.id
-        state.room[tutor.id] = student.id
+        state.room[student.id] = {
+            otherId: tutor.id,
+            personaId: student.info.personaId
+        }
+        state.room[tutor.id] = {
+            otherId: student.id,
+            personaId: tutor.info.personaId
+        }
 
         // Send confirm message to student and tutor
+        let subtitle =  '🤖 Nhập "end" để kết thúc!'
+
         let tutorSub = subjects[tutor.info.goodSub].title
+        let tutorInfoText = `Nickname: ${tutor.info.nickname} (Lớp ${tutor.info.grade})\nMôn: ${tutorSub}\n${subtitle}`
         bot.say(student.id, {
             cards: [{
-                title: `Đã tìm được một gia sư phù hợp với bạn (Lớp: ${tutor.info.grade}, Môn: ${tutorSub})`,
-                subtitle: 'Nhập "end" hoặc "pp" để dừng cuộc trò chuyện nhé.'
+                title: `Đã tìm được một gia sư phù hợp với bạn`,
+                subtitle: tutorInfoText
             }]
         })
+
         let studentSub = subjects[student.info.needSub].title
+        let studentInfoText = `Nickname: ${student.info.nickname} (Lớp ${student.info.grade})\nMôn: ${studentSub}\n${subtitle}`
         bot.say(tutor.id, {
             cards: [{
-                title: `Đã tìm được một học sinh phù hợp với bạn (Lớp: ${student.info.grade}, Môn: ${studentSub})`,
-                subtitle: 'Nhập "end" hoặc "pp" để dừng cuộc trò chuyện nhé.'
+                title: `Đã tìm được một học sinh phù hợp với bạn`,
+                subtitle: studentInfoText
             }]
         })
         delete state[otherListType][bestOther.id]

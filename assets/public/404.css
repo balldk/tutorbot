@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css?family=Lacquer&display=swap');
+body {
+    background-color: black;
+}
+#cat-img {
+    position: absolute;
+    cursor: pointer;
+    display: block;
+    left: 50%;
+    transform: translate(-50%, 40%);
+    object-fit: cover;
+    width: 340px;
+    height: 250px;
+    border-radius: 10px;
+    border: 4px solid red;
+    box-shadow: 0 4px 20px red;
+    transition: all .2s;
+}
+#cat-img:hover {
+    transform: translate(-50%, 37%);
+}
+#title {
+    font-family: "Lacquer";
+    color: red;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+}

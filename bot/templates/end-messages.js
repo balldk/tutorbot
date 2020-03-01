@@ -1,2 +1,2 @@
 
-module.exports = ['pp', 'end']
+module.exports = ['pp', 'end', 'quit']

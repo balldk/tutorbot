@@ -1,4 +1,4 @@
-const BootBot = require('bootbot')
+const BootBot = require('./bootbot')
 
 const postbacksListener = require('./postbacks')
 const messageListener = require('./messageListener')

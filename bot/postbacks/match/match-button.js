@@ -1,4 +1,4 @@
-const checkInRoom = require('../utils/check-in-room')
+const checkInRoom = require('../../utils/check-in-room')
 
 module.exports = (payload, chat) => {
     if (checkInRoom(payload, chat, state)) return false

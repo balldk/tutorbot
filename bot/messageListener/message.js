@@ -1,7 +1,10 @@
 const endMessages = require('../templates/end-messages')
+const attachments = require('./attachments')
+const broadcastClass = require('../utils/broadcastClass')
+
 const state = global.state
 
-module.exports = bot => (payload, chat) => {
+module.exports = bot => async (payload, chat) => {
     // Skip some kind of message
     let checkEndMsg = endMessages.some(each => {
         if (payload.message.text) {
@@ -12,16 +15,20 @@ module.exports = bot => (payload, chat) => {
     if (payload.message.quick_reply) return false
 
     // Handler
-    let sender = payload.sender.id
-    let other = state.room[sender]
+    let userId = payload.sender.id
+    let other = state.room[userId]
+    let msg = payload.message
+    
     if (other) {
-        let msg = payload.message
+        let isClass = state.classes[other.classId]
         if (msg.attachments) {
-            msg.attachments.forEach(attach => {
-                bot.sendAttachment(other, attach.type, attach.payload.url)
-            })
-        } else if (msg.text) {
-            bot.say(other, msg.text)
+            attachments(payload, other, bot)
         }
+        if (msg.text) {
+            if (isClass) broadcastClass(bot, userId, msg.text)
+            else bot.say(other.otherId, msg.text, { personaId: other.personaId })
+        }
+    } else {
+        chat.say('Nói gì hiểu chết liền :)')
     }
 }

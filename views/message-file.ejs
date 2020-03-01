@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TutorBot | <%= fileType === 'audio' ? 'Ghi Âm':'Video' %></title>
+</head>
+<body>
+    <% if (fileType === 'audio') { %>
+        <audio controls autoplay>
+            <source src="<%= fileUrl %>" type="audio/mp3">
+        </audio>
+    <% } else if (fileType === 'video') { %>
+        <video controls autoplay>
+            <source src="<%= fileUrl %>" type="video/mp4">
+        </video>
+    <% } %> 
+</body>
+</html>
