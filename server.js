@@ -3,7 +3,7 @@
 // Config
 require('dotenv').config()
 require('./utils/globalAppState') // set state to global
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8080
 
 // Main app
 const app = require('./routes/app')
