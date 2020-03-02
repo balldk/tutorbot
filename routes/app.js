@@ -16,7 +16,7 @@ app.use(express.static('./assets/public'))
 // Main route
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => res.send('TutorBot is running...'))
+app.get('/', (req, res) => res.send('TutorBot is running~~'))
 app.get('/file/:filePath', (req, res) => {
     FileLink.findOne({ path: req.params.filePath }, (err, attach) => {
         if (err) {

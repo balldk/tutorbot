@@ -5,8 +5,8 @@ module.exports = async (payload, chat) => {
     await chat.say({
         text: 'Hiện tại ứng dụng mới được phát triển nên không tránh khỏi những sai sót, nếu bạn có gặp bất kì trục trặc nào thì hãy liên hệ đến anh đẹp trai https://m.me/100007015541619 này nhé =))',
         buttons: [
+            { type: 'postback', title: 'Tạo tài khoản', payload: 'SETTINGS' },
             { type: 'postback', title: 'Hướng dẫn sử dụng', payload: 'HELP' },
-            { type: 'postback', title: 'Chỉnh sửa thông tin', payload: 'SETTINGS' },
         ]
     })
 }

@@ -6,7 +6,9 @@ const EndConver = require('../messageListener/end')
 const CustomPostback = require('./custom-postback')
 
 const Match = require('./match')
+const MatchButton = require('./match/match-button')
 
+const ClassButton = require('./classroom/class-button')
 const CreateClass = require('./classroom/create-class')
 const JoinClass = require('./classroom/join-class')
 const ListClass = require('./classroom/list-class')
@@ -18,9 +20,11 @@ module.exports = bot => {
     bot.on('postback:HELP', Help)
     bot.on('postback:END_CONVER', EndConver)
 
+    bot.on('postback:MATCH_BUTTON', MatchButton)
     bot.on('postback:MATCH_STUDENT', Match(bot, 'student'))
     bot.on('postback:MATCH_TUTOR', Match(bot, 'tutor'))
     
+    bot.on('postback:CLASS_BUTTON', ClassButton)
     bot.on('postback:CREATE_CLASS', CreateClass)
     bot.on('postback:JOIN_CLASS', JoinClass(bot))
     bot.on('postback:LIST_CLASS', ListClass(0))

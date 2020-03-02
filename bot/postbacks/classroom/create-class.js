@@ -7,6 +7,13 @@ const state = global.state
 const cancel = convo => {
     convo.say('Đã huỷ lớp học!')
     convo.end()
+    return true
+}
+
+const checkCancel = (payload, convo) => {
+    if (!payload.message) return false
+    if (!payload.message.text) return false
+    if (payload.message.text.toLowerCase() === 'huỷ') return cancel(convo)
 }
 
 const notValid = async convo => {
@@ -19,6 +26,7 @@ const askTitle = convo => {
         text: 'Hãy nhập tên lớp học',
         quickReplies: ['Huỷ']
     }, async (payload, convo) => {
+        if (checkCancel(payload, convo)) return false
         if (!payload.message || !payload.message.text) return notValid(convo)
 
         let msg = payload.message.text.replace(/\s+/g, ' ')
@@ -38,6 +46,7 @@ const askPrivacy = convo => {
         text: 'Bạn có muốn công khai lớp học không?',
         quickReplies: ['Huỷ', 'Có', 'Không']
     }, (payload, convo) => {
+        if (checkCancel(payload, convo)) return false
         if (!payload.message || !payload.message.text) return notValid(convo)
 
         let msg = payload.message.text.toLowerCase()
@@ -59,6 +68,7 @@ const askClassLimit = convo => {
         text: 'Hãy nhập giới hạn học sinh (tối đa: 20)',
         quickReplies: ['Huỷ', '10', '15', '20']
     }, (payload, convo) => {
+        if (checkCancel(payload, convo)) return false
         if (!payload.message || !payload.message.text) return notValid(convo)
         
         let limit = parseInt(payload.message.text)

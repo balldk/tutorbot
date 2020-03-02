@@ -18,7 +18,14 @@ module.exports = (payload, chat) => {
         updateUser(payload.sender.id, update, data => {
             console.log(data.userId, 'updated profile')
         })
-        convo.say('Hoàn tất rồi đó! Bạn có thể kết nối với người khác từ bây giờ, chúc bạn may mắn ;)')
+        convo.say({
+            text: 'Hoàn tất rồi đó! Bạn có thể kết nối với người khác từ bây giờ, chúc bạn may mắn ;)',
+            buttons: [
+                { type: 'postback', title: 'Ghép đôi ngay', payload: 'MATCH_BUTTON' },
+                { type: 'postback', title: 'Tham gia lớp học', payload: 'CLASS_BUTTON' },
+                { type: 'postback', title: 'Hướng dẫn sử dụng', payload: 'HELP' },
+            ]
+        })
         convo.end()
     }
     const ask = new Ask(chat, 'Đã huỷ cài đặt!')
