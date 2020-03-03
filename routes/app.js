@@ -1,10 +1,14 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 
 const app = express()
 const api = require('./api')
 const bot = require('../bot')
 const FileLink = require('../db/models/FileLink')
 let messengerUrl = process.env.MESSENGER_URL
+
+// Config
+app.use(bodyParser.json())
 
 // Other routes
 app.use('/api', api)

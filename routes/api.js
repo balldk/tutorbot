@@ -19,8 +19,10 @@ api.get('/state', (req, res) => {
 	res.json(global.state)
 })
 
-api.get('/reset-state', (req, res) => {
-	global.state = initialState
+api.post('/change-state', (req, res) => {
+	Object.entries(req.body).forEach(each => {
+		global.state[each[0]] = each[1]
+	})
 	res.redirect('state?secret=' + req.query.secret)
 })
 

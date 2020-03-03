@@ -52,7 +52,7 @@ module.exports = async (convo, bot, oldData) => {
     // Find best other
     let bestOther
     let findList = Object.entries(state[otherListType])
-    let range = 1
+    let range = 3
     findList.some(each => {
         let [otherId, other] = each
         let matchSub = user[subType] === other[subTypeOther]

@@ -6,7 +6,7 @@ module.exports = bot => (payload, chat) => {
     if (!value) return false
 
     if (key === 'JOIN_CLASS') {
-        joinClass(bot, chat, value)
+        joinClass(bot, payload, chat, value)
     } else if (key === 'LIST_CLASS') {
         listClass(parseInt(value))(payload, chat)
     }

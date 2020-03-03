@@ -1,34 +1,48 @@
 const broadcastClass = require('./broadcastClass')
-const findUser = require('../../db/methods/findUser')
-const personas = require('./personas')
+const checkInRoom = require('./check-in-room')
+const Ask = require('./Ask')
+
 const state = global.state
 
-module.exports = async (bot, chat, classId) => {
-    let userId = chat.userId
+const end = (bot, convo, classId) => {
+    let userId = convo.userId
+    let classData = state.classes[classId]
+
+    state.room[userId] = {
+        classId,
+        personaId: convo.get('personaId'),
+        nickname: convo.get('nickname')
+    }
+    classData.members.push(userId)
+    let privacyVN = classData.privacy === 'public' ? 'Công khai' : 'Không công khai'
+    let formatAmount = `Học sinh: ${classData.members.length}/${classData.limit}`
+    convo.say({
+        cards: [{
+            title: `Bạn đã tham gia lớp học! (${privacyVN})`,
+            subtitle: `Tên: ${classData.title}\n${formatAmount}`
+        }]
+    })
+    broadcastClass(bot, userId, `"${convo.get('nickname')}" đã tham gia lớp học!`, true)
+    convo.end()
+}
+
+module.exports = async (bot, payload, chat, classId) => {
+    if (checkInRoom(payload, chat)) return false
+
     if (state.classes[classId]) {
         let classData = state.classes[classId]
         if (classData.limit <= classData.members.length) {
             return chat.say('Lớp học đã đầy!')
         }
 
-        let userData = await findUser(userId, 'personaId')
-        let persona = await personas.get(userData.personaId)
-
-        state.room[userId] = {
-            classId,
-            personaId: userData.personaId,
-            nickname: persona.name
-        }
-        classData.members.push(userId)
-        let privacyVN = classData.privacy === 'public' ? 'Công khai' : 'Không công khai'
-        let formatAmount = `Học sinh: ${classData.members.length}/${classData.limit}`
-        chat.say({
-            cards: [{
-                title: `Bạn đã tham gia lớp học! (${privacyVN})`,
-                subtitle: `Tên: ${classData.title}\n${formatAmount}`
-            }]
+        const ask = new Ask(chat, 'Đã huỷ!', true)
+        ask.setConvers({
+            convers: [ 'askPersona' ],
+            endConver(convo) {
+                end(bot, convo, classId)
+            }
         })
-        broadcastClass(bot, userId, `"${persona.name}" đã tham gia lớp học!`, true)
+        ask.start()
     } else {
         chat.say('Lớp học không tồn tại!')
     }

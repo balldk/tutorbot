@@ -3,8 +3,6 @@ const checkInRoom = require('../../utils/check-in-room')
 const state = global.state
 
 module.exports = pageIndex => async (payload, chat) => {
-    if (checkInRoom(payload, chat)) return false
-
     let publicClasses = Object.entries(state.classes).filter(each => each[1].privacy === 'public')
     
     let nextPageIndex = pageIndex + 8

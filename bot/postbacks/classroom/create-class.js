@@ -64,15 +64,16 @@ const askPrivacy = convo => {
 }
 
 const askClassLimit = convo => {
+    let max = 40
     convo.ask({
-        text: 'Hãy nhập giới hạn học sinh (tối đa: 20)',
+        text: `Hãy nhập giới hạn học sinh (tối đa: ${max})`,
         quickReplies: ['Huỷ', '10', '15', '20']
     }, (payload, convo) => {
         if (checkCancel(payload, convo)) return false
         if (!payload.message || !payload.message.text) return notValid(convo)
         
         let limit = parseInt(payload.message.text)
-        if (limit >= 1 && limit <= 20) {
+        if (limit >= 1 && limit <= max) {
             convo.set('limit', limit)
             end(convo)
         } else {

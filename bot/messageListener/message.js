@@ -29,6 +29,13 @@ module.exports = bot => async (payload, chat) => {
             else bot.say(other.otherId, msg.text, { personaId: other.personaId })
         }
     } else {
-        chat.say('Nói gì hiểu chết liền :)')
+        if (msg.text) {
+            if (['hi', 'hello', 'chào', 'xin chào'].includes(msg.text.toLowerCase())) 
+                chat.say('Quen không mà chào :)')
+            else
+                chat.say('Nói gì hiểu chết liền :)')
+        } else {
+            chat.say('Gửi gì tào lao vậy ba 😒')
+        }
     }
 }

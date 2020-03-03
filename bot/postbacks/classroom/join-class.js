@@ -8,7 +8,7 @@ module.exports = bot => (payload, chat) => {
     const askClass = convo => {
         convo.ask('Hãy nhập mã lớp học', (payload, convo) => {
             let classId = payload.message.text
-            joinClass(bot, chat, classId)
+            joinClass(bot, payload, chat, classId)
             convo.end()
         })
     }
