@@ -1,4 +1,3 @@
-const checkInRoom = require('../../utils/check-in-room')
 
 const state = global.state
 

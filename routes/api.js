@@ -4,7 +4,6 @@ const api = express.Router()
 const User = require('../db/models/User')
 const FileLink = require('../db/models/FileLink')
 const personas = require('../bot/utils/personas')
-const initialState = require('../utils/initialState')
 
 const adminSecure = (req, res, next) => {
 	let secret = req.query.secret

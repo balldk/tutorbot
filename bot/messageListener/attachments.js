@@ -11,6 +11,7 @@ module.exports = (payload, other, bot) => {
     let options = { personaId: other.personaId }
 
     payload.message.attachments.forEach(attach => {
+        if (attach.type === 'fallback') return false
         // image type
         if (attach.type === 'image') {
             if (classData) broadcastClass(bot, userId, memberId => {
